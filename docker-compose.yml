@@ -1,0 +1,9 @@
+version : '2'
+
+services:
+  twitter:
+    build:
+      context: ./data-producers
+    container_name: twitter_01
+    volumes:
+      - ./data-producers/Twitter:/home/ds
