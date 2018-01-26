@@ -1,4 +1,4 @@
-Company,Ticker
-Apple,AAPL
-Facebook,FB
-Google,GOOG
+Ticker,Company
+AAPL,Apple
+FB,Facebook
+GOOG,Google
