@@ -7,7 +7,7 @@ RUN apt-get update
 RUN adduser -D -S -h /home/ds -s /bin/ash ds
 
 #install neccessary packages
-RUN pip install tweepy boto3 numpy pandas schedule redis
+RUN pip install tweepy boto3 numpy pandas schedule redis jupyter
 
 #Set Variables
 ENV HOME=/home/ds

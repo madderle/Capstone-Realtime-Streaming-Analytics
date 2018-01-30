@@ -1,3 +1,8 @@
 *-checkpoint.ipynb
 *.python_history
 *.pyc
+.local/
+data-producers/IEX/.jupyter/
+data-producers/IEX/.ipython/
+data-producers/Manager/.jupyter/
+data-producers/Manager/.ipython/
