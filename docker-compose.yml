@@ -22,6 +22,9 @@ services:
     volumes:
       - ./data-producers/IEX:/home/ds
     command: jupyter-notebook --no-browser --port 8888 --ip='*' --allow-root
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     depends_on:
       - manager
 
