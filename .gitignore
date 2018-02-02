@@ -6,3 +6,7 @@ data-producers/IEX/.jupyter/
 data-producers/IEX/.ipython/
 data-producers/Manager/.jupyter/
 data-producers/Manager/.ipython/
+data-producers/Twitter/.jupyter/
+data-producers/Twitter/.ipython/
+data-producers/Manager/.cache/
+data-producers/db/

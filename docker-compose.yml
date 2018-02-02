@@ -10,6 +10,11 @@ services:
     volumes:
       - ./data-producers/Twitter:/home/ds
     command: jupyter-notebook --no-browser --port 9999 --ip='*' --allow-root
+    environment:
+      - ACCESS_TOKEN=${ACCESS_TOKEN}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+      - CONSUMER_KEY=${CONSUMER_KEY}
+      - CONSUMER_SECRET=${CONSUMER_SECRET}
     depends_on:
       - manager
 
@@ -25,6 +30,9 @@ services:
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PWD=${DB_PWD}
     depends_on:
       - manager
 
@@ -36,9 +44,30 @@ services:
       - "7777:7777"
     volumes:
       - ./data-producers/Manager:/home/ds
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PWD=${DB_PWD}
     command: jupyter-notebook --no-browser --port 7777 --ip='*' --allow-root
     depends_on:
       - data_store
 
   data_store:
     image: redis:alpine
+
+
+  db:
+    restart: always
+    image: mysql:5.6.36
+    container_name: mysqldb_01
+    volumes:
+      - ./data-producers/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT}"
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PWD}"
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    expose:
+      - "${DB_PORT}"
