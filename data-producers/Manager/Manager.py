@@ -4,7 +4,7 @@ import json
 import schedule
 import time
 import datetime
-#from tzlocal import get_localzone
+import os
 
 import mysql.connector
 from sqlalchemy import create_engine
@@ -25,9 +25,9 @@ queue.subscribe('event_queue')
 queue.subscribe('log_queue')
 
 ############# Setup Database ###########################
-User = %env DB_USER
-password = %env DB_PWD
-dbname = %env DB_NAME
+User = os.environ['DB_USER']
+password = os.environ['DB_PWD']
+dbname = os.environ['DB_NAME']
 
 
 engine = create_engine('mysql+mysqlconnector://{}:{}@db:3306/{}'.format(User,
