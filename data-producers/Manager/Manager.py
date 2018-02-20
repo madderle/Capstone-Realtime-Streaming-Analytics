@@ -3,7 +3,7 @@ import redis
 import json
 import schedule
 import time
-import datetime
+from datetime import date, datetime
 import os
 
 import mysql.connector
@@ -67,7 +67,13 @@ else:
 
 ################## Define Functions ##############################
 
-# Database Function creation
+#Serialize datetime.
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    raise TypeError ("Type %s not serializable" % type(obj))
 
 # Create table object
 meta = MetaData(engine, reflect=True)
@@ -75,63 +81,101 @@ log_table = meta.tables['log']
 
 
 def database_log(log_data):
-    # Need to log these items to a database.
-    # Convert the data
+    #Need to log these items to a database.
+    #Convert the data
     log_data = json.loads(log_data)
     print('------ Database Log Data --------')
     print(log_data)
     ins = log_table.insert().values(
-        log_time=log_data['log_time'],
-        Source=log_data['source'],
-        Current_Count=log_data['current_count'],
-        Count_Diff=log_data['count_diff']
-    )
+            log_time = log_data['log_time'],
+            Source = log_data['source'],
+            Current_Count = log_data['current_count'],
+            Count_Diff = log_data['count_diff']
+               )
     conn.execute(ins)
     print('Logged Log Data')
 
-
-# Create table object
+#Create table object
 event_table = meta.tables['event']
 
-
 def database_event(event_data):
-    # Need to log these items to a database.
+    #Need to log these items to a database.
     event_data = json.loads(event_data)
 
     ins = event_table.insert().values(
-        event_time=event_data['event_time'],
-        Source=event_data['source'],
-        Kind=event_data['kind'],
-        Message=event_data['message']
-    )
+            event_time = event_data['event_time'],
+            Source = event_data['source'],
+            Kind=event_data['kind'],
+            Message=event_data['message']
+               )
     conn.execute(ins)
     print('Logged Event Data')
 
+#Event Kind Types
+#Activity, Error
 
-########### Set up the company list ################
+#Manager will send itself a message when it turns data on and off
+def send_event(source, kind, message):
+    event_time = datetime.now()
+    event_time = json_serial(event_time)
+    event = {
+            "event_time": event_time,
+            "source": source,
+            "kind" : kind,
+            "message" : message
+            }
+    payload = json.dumps(event)
+    REDIS.publish('event_queue', payload)
+
+################# Set up the company list ########################
 companies = {
-    "AAPL": "Apple",
-    "FB": "Facebook",
-    "GOOG": "Google"
-}
+    "AAPL":"Apple",
+    "FB":"Facebook",
+    "GOOG":"Google Alphabet C",
+    "GOOGL":"Google Alphabet A",
+    "AMZN":"Amazon",
+    "MSFT":"Microsoft",
+    "BAC":"Bank of America",
+    "BA":"Boeing",
+    "NFLX":"Netflix",
+    "JPM":"JPMorgan Chase",
+    "TSLA":"Tesla",
+    "CSCO":"Cisco Systems",
+    "XOM":"Exxon Mobil",
+    "WFC":"Wells Fargo",
+    "V":"Visa",
+    "JNJ":"Johnson & Johnson",
+    "PFE" :"Pfizer",
+    "INTC":"Intel",
+    "HD":"Home Depot",
+    "C":"Citigroup",
+    "UTX":"United Technologies",
+    "CMCSA":"Comcast",
+    "TWTR":"Twitter",
+    "GE":"General Electric",
+    "UNH":"United Health Group",
+    "PCLN":"Priceline Group",
+    "BABA":"Alibaba Group",
+    "NVDA":"NVIDIA"
+    }
 REDIS.set('companies', json.dumps(companies))
 
-########### Setup the Data ON Flag #################
+############### Setup the Data ON Flag ###################
 REDIS.set('Data_On', 0)
 
 # Create Explicit Data On/Off Functions
-
-
 def DataOn():
-    REDIS.set('Data_On', 1)
+    REDIS.set('Data_On',1)
+    send_event('Manager', 'Activity', 'Data flag On')
 
 
 def DataOff():
-    REDIS.set('Data_On', 0)
+    REDIS.set('Data_On',0)
+    send_event('Manager', 'Activity', 'Data flag Off')
 
 
 # Turn on if starts during open times
-now = datetime.datetime.now()
+now = datetime.now()
 
 if now.hour >= 14 and now.hour < 21:
     if now.hour = 14 and now.minute >= 30:
@@ -139,7 +183,7 @@ if now.hour >= 14 and now.hour < 21:
     elif now.hour > 14:
         DataOn()
 
-########## Setup Schedules ######################
+################ Setup Schedules ######################
 # Since the market isnt open all day, want to control when turn data on and off
 
 # Time in 24 hour clocks and UTC time
@@ -161,26 +205,27 @@ schedule.every().friday.at("21:00").do(DataOff)
 while True:
     schedule.run_pending()
 
-    # May need to add in another while loop here. But we shall see after testing.
+    #May need to add in another while loop here. But we shall see after testing.
 
     next_message = queue.get_message()
-    # next_message = json.loads(queue.get_message()['data'].decode())
+    #next_message = json.loads(queue.get_message()['data'].decode())
     if next_message:
         print('------ REDIS Message -------')
         print(next_message)
-        # Ignore the initial 1 or 2 that comes out of the queue.
+        #Ignore the initial 1 or 2 that comes out of the queue.
         try:
             payload = next_message['data'].decode()
-            # check which queue
+            #check which queue
             if next_message['channel'].decode() == 'event_queue':
-                # Call database_event function to log to database
+                #Call database_event function to log to database
                 database_event(payload)
+                #Eventually can check the kind of event and do different action if error.
 
             if next_message['channel'].decode() == 'log_queue':
-                # Call database_log function to log to database
+                #Call database_log function to log to database
                 database_log(payload)
 
         except:
             pass
-
-time.sleep(1)
+            
+    time.sleep(1)
