@@ -2,6 +2,7 @@ version : '2'
 
 services:
   twitter:
+    restart: always
     build:
       context: ./data-producers
     container_name: twitter_01
@@ -24,6 +25,7 @@ services:
       - manager
 
   iex:
+    restart: always
     build:
       context: ./data-producers
     container_name: iex_01
@@ -42,6 +44,7 @@ services:
       - manager
 
   manager:
+    restart: always
     build:
       context: ./data-producers
     container_name: manager_01
@@ -56,6 +59,7 @@ services:
     command: python manager.py
     depends_on:
       - data_store
+      - db
 
   data_store:
     image: redis:alpine
