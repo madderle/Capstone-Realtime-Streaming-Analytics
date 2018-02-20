@@ -28,7 +28,13 @@ ACCESS_TOKEN_SECRET = os.environ['ACCESS_TOKEN_SECRET']
 CONSUMER_KEY = os.environ['CONSUMER_KEY']
 CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
 
-#Build Dataframe
+######################### Wait on Ready Flag ##################################
+
+
+while int(REDIS.get('Ready'))==0:
+    time.sleep(500)
+
+########################## Build Dataframe ####################################
 companies = json.loads(REDIS.get('companies').decode())
 company_df = pd.DataFrame.from_dict(companies, orient='index')
 company_df.index.name = 'Ticker'

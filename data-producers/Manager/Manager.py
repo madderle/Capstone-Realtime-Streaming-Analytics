@@ -24,6 +24,9 @@ queue = REDIS.pubsub()
 queue.subscribe('event_queue')
 queue.subscribe('log_queue')
 
+#Create Ready Flag
+REDIS.set('Ready', 0)
+
 ############# Setup Database ###########################
 User = os.environ['DB_USER']
 password = os.environ['DB_PWD']
@@ -201,6 +204,9 @@ schedule.every().friday.at("14:30").do(DataOn)
 schedule.every().friday.at("21:00").do(DataOff)
 
 ########### Execute ############################
+#Set Ready Flag
+REDIS.set('Ready', 1)
+
 
 while True:
     schedule.run_pending()
@@ -227,5 +233,5 @@ while True:
 
         except:
             pass
-            
+
     time.sleep(1)

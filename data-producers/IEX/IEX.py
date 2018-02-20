@@ -16,6 +16,12 @@ kinesis = boto3.client('kinesis', region_name='us-east-1')
 
 #Connect to Redis-DataStore
 REDIS = redis.Redis(host='data_store')
+######################### Wait on Ready Flag ##################################
+
+
+while int(REDIS.get('Ready'))==0:
+    time.sleep(500)
+
 ######################## Define Functions #####################################
 attributes = ['latestUpdate',
              'companyName',
