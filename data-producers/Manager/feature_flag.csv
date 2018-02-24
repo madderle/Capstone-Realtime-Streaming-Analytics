@@ -1,0 +1,3 @@
+Feature,State
+kinesis_stream_write,0
+database_stream_write,0
