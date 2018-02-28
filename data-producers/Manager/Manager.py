@@ -130,6 +130,24 @@ def send_event(source, kind, message):
     payload = json.dumps(event)
     REDIS.publish('event_queue', payload)
 
+########### Set up Feature Flag #####################
+
+#Setup file read and set state
+
+def update_flags_from_file():
+    feature_flags = pd.read_csv('feature_flag.csv', index_col='Feature')
+    #Set the feture flags in REDIS
+    REDIS.set('feature_flags', feature_flags.to_msgpack(compress='zlib'))
+
+def get_feature_flag(feature):
+    all_flags = pd.read_msgpack(REDIS.get("feature_flags"))
+
+    try:
+        return all_flags.get_value(feature, 'State')
+
+    except:
+        return 'Flag Not Found, not a valid feature flag'
+
 ################# Set up the company list ########################
 companies = {
     "AAPL":"Apple",
@@ -202,6 +220,9 @@ schedule.every().thursday.at("14:30").do(DataOn)
 schedule.every().thursday.at("21:00").do(DataOff)
 schedule.every().friday.at("14:30").do(DataOn)
 schedule.every().friday.at("21:00").do(DataOff)
+
+#Read the Feature Flag
+schedule.every(10).seconds.do(update_flags_from_file)
 
 ########### Execute ############################
 #Set Ready Flag
