@@ -18,9 +18,29 @@ kinesis = boto3.client('kinesis', region_name='us-east-1')
 REDIS = redis.Redis(host='data_store')
 ######################### Wait on Ready Flag ##################################
 
+def get_ready_flag():
+    try:
+        return int(REDIS.get('Ready'))
+    except:
+        return 0
 
-while int(REDIS.get('Ready'))==0:
+flag_value = get_ready_flag()
+
+while flag_value==0:
+    flag_value = get_ready_flag()
     time.sleep(500)
+
+######################### Set up Feature Flag ################################
+
+
+def get_feature_flag(feature):
+    all_flags = pd.read_msgpack(REDIS.get("feature_flags"))
+
+    try:
+        return all_flags.get_value(feature, 'State')
+
+    except:
+        return 'Flag Not Found, not a valid feature flag'
 
 ######################## Define Functions #####################################
 attributes = ['latestUpdate',
@@ -70,10 +90,11 @@ def fetch_stock_data(stocks=[]):
                 #Add counter to count stocks.
                 REDIS.incr('IEX_Stock_Count')
                 #<----- Insert to Kinesis Stream ------->
-                #response = kinesis.put_record(StreamName="IEX_Stream", Data=json.dumps(filtered), PartitionKey="partitionkey")
-                #print('---------------------------------')
-                #print(response)
-                #print(filtered)
+                if int(get_feature_flag('kinesis_stream_write'))==1:
+                    response = kinesis.put_record(StreamName="IEX_Stream", Data=json.dumps(filtered), PartitionKey="partitionkey")
+                print('---------------------------------')
+                print(response)
+                print(filtered)
     except:
         print(traceback.format_exc())
         #Send Error event
