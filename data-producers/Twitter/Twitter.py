@@ -29,9 +29,16 @@ CONSUMER_KEY = os.environ['CONSUMER_KEY']
 CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
 
 ######################### Wait on Ready Flag ##################################
+def get_ready_flag():
+    try:
+        return int(REDIS.get('Ready'))
+    except:
+        return 0
 
+flag_value = get_ready_flag()
 
-while int(REDIS.get('Ready'))==0:
+while flag_value==0:
+    flag_value = get_ready_flag()
     time.sleep(500)
 
 ########################## Build Dataframe ####################################
@@ -43,6 +50,18 @@ company_df.columns=['Company']
 company_df['tweet_ticker']=company_df.index.map(lambda x: '$'+x)
 
 tickers = company_df['tweet_ticker'].tolist()
+
+####################### Set up Feature Flag ###################################
+
+
+def get_feature_flag(feature):
+    all_flags = pd.read_msgpack(REDIS.get("feature_flags"))
+
+    try:
+        return all_flags.get_value(feature, 'State')
+
+    except:
+        return 'Flag Not Found, not a valid feature flag'
 
 ########################### Define Functions #################################
 attributes = ['created_at',
@@ -98,7 +117,8 @@ class TweetListener(StreamListener):
                     #Add counter to count stocks.
                     REDIS.incr('Twitter_Stock_Count')
                     #---------- Insert to Kinesis Stream --------------
-                    #response = kinesis.put_record(StreamName="Twitter_Stream", Data=json.dumps(filtered), PartitionKey="partitionkey")
+                    if int(get_feature_flag('kinesis_stream_write'))==1:
+                        response = kinesis.put_record(StreamName="Twitter_Stream", Data=json.dumps(filtered), PartitionKey="partitionkey")
                     return True
 
         except Exception as e:
