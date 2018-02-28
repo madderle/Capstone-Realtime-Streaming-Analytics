@@ -5,6 +5,7 @@ import schedule
 import time
 from datetime import date, datetime
 import os
+import pandas as pd
 
 import mysql.connector
 from sqlalchemy import create_engine
@@ -199,7 +200,7 @@ def DataOff():
 now = datetime.now()
 
 if now.hour >= 14 and now.hour < 21:
-    if now.hour = 14 and now.minute >= 30:
+    if now.hour == 14 and now.minute >= 30:
         DataOn()
     elif now.hour > 14:
         DataOn()
