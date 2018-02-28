@@ -92,9 +92,9 @@ def fetch_stock_data(stocks=[]):
                 #<----- Insert to Kinesis Stream ------->
                 if int(get_feature_flag('kinesis_stream_write'))==1:
                     response = kinesis.put_record(StreamName="IEX_Stream", Data=json.dumps(filtered), PartitionKey="partitionkey")
-                print('---------------------------------')
-                print(response)
-                print(filtered)
+                # print('---------------------------------')
+                # print(response)
+                # print(filtered)
     except:
         print(traceback.format_exc())
         #Send Error event
