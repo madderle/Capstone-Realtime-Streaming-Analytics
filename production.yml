@@ -10,7 +10,7 @@ services:
       - "9999:9999"
     volumes:
       - ./data-producers/Twitter:/home/ds
-    command: python twitter.py
+    command: python Twitter.py
     environment:
       - ACCESS_TOKEN=${ACCESS_TOKEN}
       - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
@@ -35,7 +35,7 @@ services:
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      
+
     depends_on:
       - manager
 
@@ -52,7 +52,7 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PWD=${DB_PWD}
-    command: python manager.py
+    command: python Manager.py
     depends_on:
       - data_store
       - db
