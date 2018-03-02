@@ -47,7 +47,7 @@ if not engine.dialect.has_table(engine, 'log'):
     print('Log Table being created....')
     # Time, Source, Current Count, Count Diff
     t1 = Table('log', meta,
-               Column('log_time', DateTime, default=datetime.datetime.utcnow),
+               Column('log_time', DateTime, default=datetime.utcnow),
                Column('Source', String(30)),
                Column('Current_Count', Integer),
                Column('Count_Diff', Integer))
@@ -61,7 +61,7 @@ if not engine.dialect.has_table(engine, 'event'):
     print('Event Table being created....')
     # Time, Source, Current Count, Count Diff
     t1 = Table('event', meta,
-               Column('event_time', DateTime, default=datetime.datetime.utcnow),
+               Column('event_time', DateTime, default=datetime.utcnow),
                Column('Source', String(30)),
                Column('Kind', String(30)),
                Column('Message', String(8000)))
