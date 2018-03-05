@@ -76,3 +76,12 @@ services:
       - "${DB_PORT}:${DB_PORT}"
     expose:
       - "${DB_PORT}"
+
+  db-data:
+    restart: always
+    container_name: mongodb_01
+    image: mongo:3.6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data-producers/db-data:/data/db

@@ -7,7 +7,7 @@ RUN apt-get update
 RUN adduser -D -S -h /home/ds -s /bin/ash ds
 
 #install neccessary packages
-RUN pip install tweepy boto3 numpy pandas schedule redis jupyter mysql-connector==2.1.4 sqlalchemy
+RUN pip install tweepy pymongo boto3 numpy pandas schedule redis jupyter mysql-connector==2.1.4 sqlalchemy
 
 #Set Variables
 ENV HOME=/home/ds
