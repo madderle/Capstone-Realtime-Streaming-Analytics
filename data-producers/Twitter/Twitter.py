@@ -19,6 +19,9 @@ from tweepy import API
 
 kinesis = boto3.client('kinesis', region_name='us-east-1')
 
+#Mongo
+from pymongo import MongoClient
+
 #Connect to Redis-DataStore
 REDIS = redis.Redis(host='data_store')
 
@@ -27,6 +30,11 @@ ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 ACCESS_TOKEN_SECRET = os.environ['ACCESS_TOKEN_SECRET']
 CONSUMER_KEY = os.environ['CONSUMER_KEY']
 CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
+
+#Setup Mongo and create the database and collection
+client = MongoClient('db-data')
+db = client['stock_tweets']
+coll_reference = db.twitter
 
 ######################### Wait on Ready Flag ##################################
 def get_ready_flag():
@@ -116,6 +124,9 @@ class TweetListener(StreamListener):
                     print(filtered)
                     #Add counter to count stocks.
                     REDIS.incr('Twitter_Stock_Count')
+                     # --------- Insert into MongoDB -------------------
+                    if int(get_feature_flag('database_stream_write'))==1:
+                        coll_reference.insert_one(filtered)
                     #---------- Insert to Kinesis Stream --------------
                     if int(get_feature_flag('kinesis_stream_write'))==1:
                         response = kinesis.put_record(StreamName="Twitter_Stream", Data=json.dumps(filtered), PartitionKey="partitionkey")

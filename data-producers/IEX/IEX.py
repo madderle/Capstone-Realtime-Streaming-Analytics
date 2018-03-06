@@ -13,9 +13,18 @@ import os
 
 kinesis = boto3.client('kinesis', region_name='us-east-1')
 
+#Mongo
+from pymongo import MongoClient
 
 #Connect to Redis-DataStore
 REDIS = redis.Redis(host='data_store')
+
+#Setup Mongo and create the database and collection
+client = MongoClient('db-data')
+db = client['stock_tweets']
+coll_reference = db.iex
+
+
 ######################### Wait on Ready Flag ##################################
 
 def get_ready_flag():
@@ -89,6 +98,10 @@ def fetch_stock_data(stocks=[]):
                 filtered = filter_stock_attributes(obj)
                 #Add counter to count stocks.
                 REDIS.incr('IEX_Stock_Count')
+                #<------ Insert into MongoDb ----------->
+                if int(get_feature_flag('database_stream_write'))==1:
+                    coll_reference.insert_one(filtered)
+
                 #<----- Insert to Kinesis Stream ------->
                 if int(get_feature_flag('kinesis_stream_write'))==1:
                     response = kinesis.put_record(StreamName="IEX_Stream", Data=json.dumps(filtered), PartitionKey="partitionkey")
