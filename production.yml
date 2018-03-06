@@ -39,6 +39,24 @@ services:
     depends_on:
       - manager
 
+  analytics:
+    build:
+      context: ./data-producers
+    container_name: analytics_01
+    ports:
+      - "7788:7788"
+    volumes:
+      - ./data-producers/Analytics:/home/ds
+    command: jupyter-notebook --no-browser --port 7788 --ip='*' --allow-root
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PWD=${DB_PWD}
+    depends_on:
+      - manager
+
   manager:
     restart: always
     build:
