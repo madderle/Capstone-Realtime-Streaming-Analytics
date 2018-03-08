@@ -221,7 +221,7 @@ send_event('Twitter', 'Activity', 'Data Source Started')
 
 #Setup Schedule
 schedule.clear()
-schedule.every(30).seconds.do(log)
+schedule.every(60).seconds.do(log)
 
 #Execute
 while True:

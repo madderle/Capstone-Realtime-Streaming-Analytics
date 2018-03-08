@@ -187,8 +187,8 @@ REDIS.set('IEX_Stock_Count', 0)
 
 #Setup Schedule
 schedule.clear()
-schedule.every(30).seconds.do(fetch_stock_data, stocks=stock_tickers)
-schedule.every(35).seconds.do(log)
+schedule.every(60).seconds.do(fetch_stock_data, stocks=stock_tickers)
+schedule.every(65).seconds.do(log)
 
 #Send Start event
 send_event('IEX', 'Activity', 'Data Source Started')
