@@ -96,6 +96,7 @@ def fetch_stock_data(stocks=[]):
                 str_response = response.read().decode('utf-8')
                 obj = json.loads(str_response)
                 filtered = filter_stock_attributes(obj)
+                filtered['Ticker'] = ticker
                 #Add counter to count stocks.
                 REDIS.incr('IEX_Stock_Count')
                 #<------ Insert into MongoDb ----------->
@@ -176,7 +177,7 @@ def log():
     #Send the log event
     send_log(source='IEX',current_count = current_stock_count, count_diff=stock_count_diff)
 
-    #print('Logged Data')
+    print('Logged Data. Current Stock Count: {}'.format(current_stock_count))
 
 ############################### Execute #######################################
 #Read Data-Store
