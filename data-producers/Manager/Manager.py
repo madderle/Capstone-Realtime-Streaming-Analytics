@@ -136,9 +136,27 @@ def send_event(source, kind, message):
 #Setup file read and set state
 
 def update_flags_from_file():
+    #Read Previous Value
+    try:
+        #Try read the feature flags
+        all_flags = pd.read_msgpack(REDIS.get("feature_flags"))
+    except:
+        #If doesnt exist, which will happen when first starts. Create empty data frame
+        all_flags = pd.DataFrame()
+
+    #Read File
     feature_flags = pd.read_csv('feature_flag.csv', index_col='Feature')
-    #Set the feture flags in REDIS
+
+    #Set feature flags in REDIS
     REDIS.set('feature_flags', feature_flags.to_msgpack(compress='zlib'))
+    #Check for difference
+    if not all_flags.equals(feature_flags):
+        if all_flags.empty:
+            #Send event
+            send_event('Manager', 'Activity', 'Feature Flags Initialized to {}'.format(feature_flags.to_dict()))
+        else:
+            #Send event
+            send_event('Manager', 'Activity', 'Feature Flags Changed to {}'.format(feature_flags.to_dict()))
 
 def get_feature_flag(feature):
     all_flags = pd.read_msgpack(REDIS.get("feature_flags"))
