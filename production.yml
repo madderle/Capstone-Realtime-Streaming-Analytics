@@ -94,3 +94,17 @@ services:
       - "${DB_PORT}:${DB_PORT}"
     expose:
       - "${DB_PORT}"
+
+  mongodbbackup:
+    image: 'deenoize/mongodb-backup-s3:latest'
+    links:
+      - db-data
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - BUCKET=brandyn-twitter-sentiment-analysis
+      - BACKUP_FOLDER=DBBackup/Production/
+      - INIT_BACKUP=true
+      - CRON_TIME=0 4 * * 1-5
+      - MONGODB_HOST=db-data
+      - MONGODB_PORT=27017

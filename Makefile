@@ -37,5 +37,8 @@ log-manager:
 log-db:
 	docker-compose logs db
 
+	log-db-data:
+		docker-compose logs db-data
+
 log-analytics:
 	docker-compose logs analytics
