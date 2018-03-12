@@ -96,6 +96,7 @@ services:
       - "${DB_PORT}"
 
   mongodbbackup:
+    restart: always
     image: 'deenoize/mongodb-backup-s3:latest'
     links:
       - db-data
