@@ -17,4 +17,4 @@ The goal of this project is twofold:
 ## Architecture
 
 The overall architecture is shown in this image:
-![Overall](../Documentation/Images/Architecture_Overall.png)
+![Overall](../master/Documentation/Images/Architecture_Overall.png)
