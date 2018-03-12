@@ -24,5 +24,15 @@ EC2 is hosting the dockerized production system that pushes data to Kinesis via 
 The EC2 services is shown in this image:
 ![EC2](../master/Documentation/Images/Architecture_EC2.png)
 
+There are several services running:
+1. Stocks: This service is responsible for fetching Live stock data from IEX.
+2. Twitter: This service is responsible for fetching tweets from the Twitter API.
+3. Manager: This service is responsible for controlling when to turn on fetching when the market is open.
+4. Redis: its the mechanism the Stock and Twitter services use to pass information to the Manager service.
+5. Log: this service is used to log events from the other services.
+6. Data Store: This service is used as a backup to sending data to Kinesis. Its a way to quickly gather data without having to pay the transfer costs of Kinesis.
+7. Analysis: this service is used to analyze the data from the Data Store. Its being used to validate different machine learning models to deploy in production.
+
+
 The full system diagram is shown in this image:
 ![Full](../master/Documentation/Images/Architecture_Full.png)
