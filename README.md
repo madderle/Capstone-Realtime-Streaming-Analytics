@@ -18,3 +18,11 @@ The goal of this project is twofold:
 
 The overall architecture is shown in this image:
 ![Overall](../master/Documentation/Images/Architecture_Overall.png)
+
+EC2 is hosting the dockerized production system that pushes data to Kinesis via the Boto3 library.
+
+The EC2 services is shown in this image:
+![EC2](../master/Documentation/Images/Architecture_EC2.png)
+
+The full system diagram is shown in this image:
+![Full](../master/Documentation/Images/Architecture_Full.png)
