@@ -217,10 +217,10 @@ def DataOff():
 # Turn on if starts during open times
 now = datetime.now()
 
-if now.hour >= 14 and now.hour < 21:
-    if now.hour == 14 and now.minute >= 30:
+if now.hour >= 13 and now.hour < 20:
+    if now.hour == 13 and now.minute >= 30:
         DataOn()
-    elif now.hour > 14:
+    elif now.hour > 13:
         DataOn()
 
 ################ Setup Schedules ######################
@@ -229,16 +229,16 @@ if now.hour >= 14 and now.hour < 21:
 # Time in 24 hour clocks and UTC time
 schedule.clear()
 # Setup Data On/Off Schedule
-schedule.every().monday.at("14:30").do(DataOn)
-schedule.every().monday.at("21:00").do(DataOff)
-schedule.every().tuesday.at("14:30").do(DataOn)
-schedule.every().tuesday.at("21:00").do(DataOff)
-schedule.every().wednesday.at("14:30").do(DataOn)
-schedule.every().wednesday.at("21:00").do(DataOff)
-schedule.every().thursday.at("14:30").do(DataOn)
-schedule.every().thursday.at("21:00").do(DataOff)
-schedule.every().friday.at("14:30").do(DataOn)
-schedule.every().friday.at("21:00").do(DataOff)
+schedule.every().monday.at("13:30").do(DataOn)
+schedule.every().monday.at("20:00").do(DataOff)
+schedule.every().tuesday.at("13:30").do(DataOn)
+schedule.every().tuesday.at("20:00").do(DataOff)
+schedule.every().wednesday.at("13:30").do(DataOn)
+schedule.every().wednesday.at("20:00").do(DataOff)
+schedule.every().thursday.at("13:30").do(DataOn)
+schedule.every().thursday.at("20:00").do(DataOff)
+schedule.every().friday.at("13:30").do(DataOn)
+schedule.every().friday.at("20:00").do(DataOff)
 
 #Read the Feature Flag
 schedule.every(10).seconds.do(update_flags_from_file)
