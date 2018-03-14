@@ -13,6 +13,16 @@ The goal of this project is twofold:
 1. Set Up a production ready real time streaming analytics system using AWS.
 2. Use sentiment analysis of tweet to predict stock prices.
 
+##Application Features
+1. Data Sources turn on and off with the start and end of the market day.
+2. Twitter Data Source filters on Ticker Symbols.
+3. Feature Flags implemented to easily turn on/off writing to Kinesis streams and writing to Mongo DB.
+4. Auto MongoDB backups.
+5. Event and Error Logging.
+6. Tweet and Stock Price count Logging.
+7. Dedicated container for Data Analysis.
+
+
 
 ## Architecture
 
