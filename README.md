@@ -42,6 +42,7 @@ There are several services running:
 5. Log: this service is used to log events from the other services.
 6. Data Store: This service is used as a backup to sending data to Kinesis. Its a way to quickly gather data without having to pay the transfer costs of Kinesis.
 7. Analysis: this service is used to analyze the data from the Data Store. Its being used to validate different machine learning models to deploy in production.
+8. Backup: This service performs daily backups of the MongoDB and uploads to S3.
 
 
 The full system diagram is shown in this image:
