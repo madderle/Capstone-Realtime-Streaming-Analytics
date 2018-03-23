@@ -20,7 +20,10 @@ from pymongo import MongoClient
 REDIS = redis.Redis(host='data_store')
 
 # Setup Mongo and create the database and collection
-client = MongoClient('db-data')
+User = os.environ['MONGODB_USER']
+password = os.environ['MONGODB_PASS']
+
+client = MongoClient('db-data', username=User, password=password)
 db = client['stock_tweets']
 coll_reference = db.iex
 
