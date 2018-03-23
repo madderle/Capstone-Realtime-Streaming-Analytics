@@ -20,6 +20,8 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PWD=${DB_PWD}
+      - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
     depends_on:
       - manager
 
@@ -38,6 +40,8 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PWD=${DB_PWD}
+      - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
     depends_on:
       - manager
 
@@ -57,6 +61,8 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PWD=${DB_PWD}
+      - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
     depends_on:
       - manager
 
@@ -72,6 +78,8 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PWD=${DB_PWD}
+      - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
     command: jupyter-notebook --no-browser --port 7777 --ip='*' --allow-root
     depends_on:
       - data_store
@@ -100,6 +108,9 @@ services:
     restart: always
     container_name: mongodb_01
     image: mongo:3.6.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     ports:
       - "27017:27017"
     volumes:
@@ -107,6 +118,7 @@ services:
 
   mongodbbackup:
     image: 'deenoize/mongodb-backup-s3:latest'
+    container_name: mongobackup_01
     links:
       - db-data
     environment:
@@ -119,3 +131,5 @@ services:
       - CRON_TIME=0 4 * * 1-5
       - MONGODB_HOST=db-data
       - MONGODB_PORT=27017
+      - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}

@@ -32,7 +32,10 @@ CONSUMER_KEY = os.environ['CONSUMER_KEY']
 CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
 
 # Setup Mongo and create the database and collection
-client = MongoClient('db-data')
+User = os.environ['MONGODB_USER']
+password = os.environ['MONGODB_PASS']
+
+client = MongoClient('db-data', username=User, password=password)
 db = client['stock_tweets']
 coll_reference = db.twitter
 

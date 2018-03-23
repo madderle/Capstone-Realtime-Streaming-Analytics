@@ -18,6 +18,8 @@ services:
       - CONSUMER_SECRET=${CONSUMER_SECRET}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
 
     depends_on:
       - manager
@@ -35,6 +37,8 @@ services:
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
 
     depends_on:
       - manager
@@ -54,6 +58,8 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PWD=${DB_PWD}
+      - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
     depends_on:
       - manager
 
@@ -70,6 +76,8 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PWD=${DB_PWD}
+      - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
     command: python Manager.py
     depends_on:
       - data_store
@@ -98,6 +106,7 @@ services:
   mongodbbackup:
     restart: always
     image: 'deenoize/mongodb-backup-s3:latest'
+    container_name: mongobackup_01
     links:
       - db-data
     environment:
@@ -105,7 +114,9 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - BUCKET=brandyn-twitter-sentiment-analysis
       - BACKUP_FOLDER=DBBackup/Production/
-      - INIT_BACKUP=true
+      - INIT_BACKUP=false
       - CRON_TIME=0 16 * * 1-5
       - MONGODB_HOST=db-data
       - MONGODB_PORT=27017
+      - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
