@@ -1,0 +1,16 @@
+version : '2'
+
+
+services:
+    analytics:
+      image: madderle/realtime-streaming-analytics:analysis-1.1
+      volumes:
+        - ./src:/home/ds
+      ports:
+        - "7799:7799"
+      environment:
+        - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+        - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
+        - PYTHONUNBUFFERED=1
