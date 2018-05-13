@@ -4,6 +4,7 @@ version : '2'
 services:
     analytics:
       image: madderle/realtime-streaming-analytics:analysis-1.1
+      container_name: realtime-analysis
       volumes:
         - ./src:/home/ds
       ports:
@@ -14,3 +15,4 @@ services:
         - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
         - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
         - PYTHONUNBUFFERED=1
+        - IP=${IP}
