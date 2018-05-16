@@ -1,7 +1,7 @@
 FROM jupyter/pyspark-notebook
 
 #Create a user ds
-RUN useradd -D -S -h /home/ds -s /bin/ash ds
+RUN useradd /home/ds -s /bin/ash ds
 
 #install neccessary packages
 RUN pip install jupyterlab boto3 pymongo tweet-preprocessor redis
