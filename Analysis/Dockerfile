@@ -1,4 +1,4 @@
-FROM continuumio/anaconda3
+bFROM continuumio/anaconda3
 
 #Run an update
 RUN apt-get update
