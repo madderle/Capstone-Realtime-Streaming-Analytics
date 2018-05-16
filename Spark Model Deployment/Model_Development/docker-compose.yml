@@ -1,0 +1,18 @@
+version : '2'
+
+services:
+    spark:
+      build:
+        context: .
+      container_name: spark_twitter_stocks
+      ports:
+        - "7788:7788"
+      volumes:
+        - ./src:/home/ds
+      environment:
+        - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+        - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
+        - PYTHONUNBUFFERED=1
+        - IP=${IP}
