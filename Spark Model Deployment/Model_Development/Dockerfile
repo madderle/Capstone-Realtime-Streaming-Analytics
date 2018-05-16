@@ -1,6 +1,8 @@
 FROM jupyter/pyspark-notebook
 
 #Create a user ds
+
+USER root
 RUN adduser ds
 
 
