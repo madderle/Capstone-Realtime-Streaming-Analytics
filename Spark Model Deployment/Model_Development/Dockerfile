@@ -1,7 +1,7 @@
 FROM jupyter/pyspark-notebook
 
 #Create a user ds
-RUN adduser -h /home/ds -s /bin/ash ds
+RUN adduser ds
 
 
 #install neccessary packages
