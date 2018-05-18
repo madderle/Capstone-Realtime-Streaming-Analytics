@@ -2,8 +2,7 @@ version : '2'
 
 services:
     spark:
-      build:
-        context: .
+      image: madderle/twitter-realtime-stocks:model-deployment-1.0
       container_name: spark_twitter_stocks
       ports:
         - "7788:7788"
