@@ -7,7 +7,7 @@ RUN adduser ds
 
 
 #install neccessary packages
-RUN pip install jupyterlab boto3 pymongo tweet-preprocessor redis mysql-connector==2.1.4 sqlalchemy schedule
+RUN pip install jupyterlab boto3 pymongo tweet-preprocessor redis mysql-connector==2.1.4 sqlalchemy schedule awscli
 
 #Set Variables
 ENV HOME=/home/ds
