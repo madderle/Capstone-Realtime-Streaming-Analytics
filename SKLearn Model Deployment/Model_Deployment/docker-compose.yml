@@ -8,7 +8,8 @@ services:
       volumes:
         - ./src:/home/ds
       ports:
-        - "7799:7799"
+        - "7999:7999"
+      command: jupyter lab --no-browser --port 7999 --ip='*' --allow-root --NotebookApp.iopub_data_rate_limit=10000000
       environment:
         - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
         - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
