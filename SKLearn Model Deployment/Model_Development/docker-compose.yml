@@ -1,0 +1,21 @@
+version : '2'
+
+
+services:
+    analytics:
+      image: madderle/twitter-realtime-stocks:sklearn-model-deployment-1.0
+      container_name: realtime_stock_analysis
+      volumes:
+        - ./src:/home/ds
+      ports:
+        - "7799:7799"
+      environment:
+        - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+        - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
+        - PYTHONUNBUFFERED=1
+        - IP=${IP}
+        - DB_NAME=${DB_NAME}
+        - DB_USER=${DB_USER}
+        - DB_PWD=${DB_PWD}
