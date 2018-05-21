@@ -9,7 +9,7 @@ services:
         - ./src:/home/ds
       ports:
         - "7999:7999"
-      command: python ./src/Daily_Model_Deployment.py
+      command: python Daily_Model_Deployment.py
       environment:
         - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
         - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
