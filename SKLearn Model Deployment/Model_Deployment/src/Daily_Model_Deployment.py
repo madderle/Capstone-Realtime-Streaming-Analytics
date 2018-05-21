@@ -131,7 +131,8 @@ query = '''
         ORDER BY run_time DESC
         LIMIT 1
         '''
-version_number = conn.execute(query).fetchone()[0]
+
+model_version_number = conn.execute(query).fetchone()[0]
 
 ######################### Setup Redis #####################
 # Connect to Redis-DataStore
@@ -235,6 +236,7 @@ def make_predictions():
     # Only pull stock info if the DataFlag is set.
     if int(REDIS.get('Data_On')) == 1:
 
+        print('Assembling Data Frames')
         # Call Functions
         twitter_delimited_daily = get_twitter_data()
         stock_delimited_daily = get_stock_data()
@@ -245,12 +247,14 @@ def make_predictions():
         # To flatten after combined everything.
         daily_df.reset_index(inplace=True)
 
+        print('Cleaning Data')
         # Clean the tweets, by removing special characters
         daily_df['Clean_text'] = daily_df['text'].apply(lambda x: preprocess_tweet(x))
 
         # Split Between Outcome and Features
         features = daily_df[['Number_of_Tweets', 'Number_of_Users', 'Mean_Volume', 'Clean_text']]
 
+        print('Making Predictions')
         # Predictions
         y = model.predict(features)
 
@@ -259,11 +263,11 @@ def make_predictions():
 
         # Log to Database
         for item in daily_df.itertuples():
-            version_number = int(version_number)
+            version_number = int(model_version_number)
             company = item[2]
             prediction = item[8]
             database_log(filename, version_number, company, prediction)
-
+        print('Made Prediction')
 ############################### Execute #######################################
 
 
