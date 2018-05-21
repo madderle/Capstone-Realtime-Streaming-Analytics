@@ -14,7 +14,7 @@ import time
 from datetime import date, datetime, timedelta
 import subprocess
 import redis
-import shedule
+import schedule
 
 # NLP
 import nltk
