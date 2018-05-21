@@ -1,5 +1,6 @@
 # Capstone-Realtime-Streaming-Analytics
-Using AWS Kinesis and EMR to accomplish real time Twitter and Stock Analysis.
+
+Use Twitter to make stock predictions.
 
 #### Team Members: Brandyn Adderley
 
@@ -10,7 +11,7 @@ Even beyond the idea of analyzing tweets in real time, the idea of accessing rea
 
 
 The goal of this project is twofold:
-1. Set Up a production ready real time streaming analytics system using AWS.
+1. Set Up a production ready analytics system using AWS.
 2. Use sentiment analysis of tweet to predict stock prices.
 
 ## Application Features
@@ -29,7 +30,7 @@ The goal of this project is twofold:
 The overall architecture is shown in this image:
 ![Overall](../master/Documentation/Images/Architecture_Overall.png)
 
-EC2 is hosting the dockerized production system that pushes data to Kinesis via the Boto3 library.
+EC2 is hosting the dockerized production system that pushes data to Kinesis via the Boto3 library and a Mongo database.
 
 The EC2 services is shown in this image:
 ![EC2](../master/Documentation/Images/Architecture_EC2.png)
