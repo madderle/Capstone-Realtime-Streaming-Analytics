@@ -13,7 +13,7 @@ warnings.filterwarnings('ignore')
 import time
 from datetime import date, datetime, timedelta
 import subprocess
-
+import redis
 
 # NLP
 import nltk
