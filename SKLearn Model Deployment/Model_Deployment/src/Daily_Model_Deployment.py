@@ -56,12 +56,14 @@ password = os.environ['DB_PWD']
 dbname = os.environ['DB_NAME']
 IP = os.environ['IP']
 
+
+
 engine = create_engine('mysql+mysqlconnector://{}:{}@{}:3306/{}'.format(User,
-                                                                        password, IP, dbname), echo=False)
+                                                                    password, IP, dbname), echo=False)
 conn = engine.connect()
 
 # Check to see if the tables are created and if not, create them
-meta = MetaData(engine)
+#meta = MetaData(engine)
 
 # Create prediction table
 if not engine.dialect.has_table(engine, 'daily_model_predictions'):
@@ -261,13 +263,22 @@ def make_predictions():
         # Set Predictions to daily dataframe
         daily_df['predictions'] = y
 
-        # Log to Database
-        for item in daily_df.itertuples():
-            version_number = int(model_version_number)
-            company = item[2]
-            prediction = item[8]
-            database_log(filename, version_number, company, prediction)
-        print('Made Prediction')
+        try:
+            # Log to Database
+            for item in daily_df.itertuples():
+                version_number = int(model_version_number)
+                company = item[2]
+                prediction = item[8]
+                database_log(filename, version_number, company, prediction)
+
+                print('Made Prediction')
+        except:
+            print('Error writing to Database')
+            conn = engine.connect()
+            # Create table object
+            meta = MetaData(engine, reflect=True)
+            daily_model_predictions_table = meta.tables['daily_model_predictions']
+
 ############################### Execute #######################################
 
 
