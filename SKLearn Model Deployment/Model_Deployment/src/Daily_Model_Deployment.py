@@ -271,7 +271,7 @@ def make_predictions():
                 prediction = item[8]
                 database_log(filename, version_number, company, prediction)
 
-                print('Made Prediction')
+            print('Made Prediction')
         except:
             print('Error writing to Database')
             conn = engine.connect()
