@@ -8,7 +8,8 @@ services:
       volumes:
         - ./src:/home/ds
       ports:
-        - "7799:7799"
+        - "7999:7999"
+      command: python Daily_Model_Development.py
       environment:
         - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
         - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
