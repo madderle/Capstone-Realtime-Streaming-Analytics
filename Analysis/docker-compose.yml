@@ -16,3 +16,6 @@ services:
         - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
         - PYTHONUNBUFFERED=1
         - IP=${IP}
+        - DB_NAME=${DB_NAME}
+        - DB_USER=${DB_USER}
+        - DB_PWD=${DB_PWD}
