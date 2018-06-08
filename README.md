@@ -13,7 +13,7 @@ Even beyond the idea of analyzing tweets in real time, the idea of accessing rea
 The goal of this project is twofold:
 1. Set Up a production ready analytics system using AWS.
 2. See if there is a relationship between Stock sentiment and movement in the price of the stock. This is the first
-part of the problem. Once this relationship is establish, then the next step is to figure out how to make money.
+part of the problem. Once this relationship is established, then the next step is to figure out how to make money.
 
 ## Application Features
 1. Data Sources turn on and off with the start and end of the market day.
