@@ -12,7 +12,8 @@ Even beyond the idea of analyzing tweets in real time, the idea of accessing rea
 
 The goal of this project is twofold:
 1. Set Up a production ready analytics system using AWS.
-2. Use sentiment analysis of tweet to predict stock prices.
+2. See if there is a relationship between Stock sentiment and movement in the price of the stock. This is the first
+part of the problem. Once this relationship is establish, then the next step is to figure out how to make money.
 
 ## Application Features
 1. Data Sources turn on and off with the start and end of the market day.
@@ -49,4 +50,4 @@ There are several services running:
 The full system diagram is shown in this image:
 ![Full](../master/Documentation/Images/Architecture_Full.png)
 
-Data is sent to a Spark instance via Spark Streaming and aggregations are done on the data. There is an instance used for development of the SKLearn model. The model is retrained, serialized and uploaded to S3. The deployed instance pulls the latest model from S3 and makes predictions  every 20 minutes and logs those predictions to a database to be later analyzed. 
+Data is sent to a Spark instance via Spark Streaming and aggregations are done on the data. There is an instance used for development of the SKLearn model. The model is retrained, serialized and uploaded to S3. The deployed instance pulls the latest model from S3 and makes predictions  every 20 minutes and logs those predictions to a database to be later analyzed.
