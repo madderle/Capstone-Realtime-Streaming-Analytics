@@ -45,6 +45,8 @@ There are several services running:
 7. Analysis: this service is used to analyze the data from the Data Store. Its being used to validate different machine learning models to deploy in production.
 8. Backup: This service performs daily backups of the MongoDB and uploads to S3.
 
-
+### Full Architecture
 The full system diagram is shown in this image:
 ![Full](../master/Documentation/Images/Architecture_Full.png)
+
+Data is sent to a Spark instance via Spark Streaming and aggregations are done on the data. There is an instance used for development of the SKLearn model. The model is retrained, serialized and uploaded to S3. The deployed instance pulls the latest model from S3 and makes predictions  every 20 minutes and logs those predictions to a database to be later analyzed. 
