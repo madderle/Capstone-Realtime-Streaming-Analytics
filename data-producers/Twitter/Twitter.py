@@ -115,6 +115,7 @@ def filter_attr(data):
             attached_company.append(company[1:])
 
     output['Company'] = attached_company
+    output['created_at'] = datetime.strptime(output['created_at'], '%a %b %d %H:%M:%S +0000 %Y')
 
     return output
 
