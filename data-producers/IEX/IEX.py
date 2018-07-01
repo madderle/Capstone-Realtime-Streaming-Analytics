@@ -86,6 +86,7 @@ def filter_stock_attributes(data):
     ctime = output['latestUpdate'] / 1000
     new_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(ctime))
     output['latestUpdate'] = new_time
+    output['latestUpdate'] = datetime.strptime(output['latestUpdate'], '%Y-%m-%d %H:%M:%S')
 
     return output
 
