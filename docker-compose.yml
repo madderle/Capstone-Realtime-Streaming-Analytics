@@ -106,6 +106,25 @@ services:
     expose:
       - "${DB_PORT}"
 
+
+  data_service:
+    build:
+      context: ./data-producers/DataService
+    container_name: djangoweb_02
+    command: /bin/sh -c 'cd dataservice && gunicorn -b:8000 dataservice.wsgi:application -w 2'
+    #command: python manage.py runserver
+    volumes:
+      - ./data-producers/DataService/src:/home/ds
+    ports:
+      - "8000:8000"
+
+    expose:
+      - "8000"
+
+    environment:
+      - MONGODB_USER=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGODB_PASS=${MONGO_INITDB_ROOT_PASSWORD}
+
   db-data:
     restart: always
     container_name: mongodb_01
@@ -128,7 +147,7 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - BUCKET=brandyn-twitter-sentiment-analysis
       - BACKUP_FOLDER=DBBackup/Development/
-      - INIT_BACKUP=true
+      #- INIT_BACKUP=true
       # - DISABLE_CRON=true
       - CRON_TIME=0 4 * * 1-5
       - MONGODB_HOST=db-data
